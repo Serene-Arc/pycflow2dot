@@ -35,6 +35,7 @@ CLASSIFIERS = [
     'Programming Language :: Python',
     'Programming Language :: Python :: 3 :: Only',
     'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
     'Topic :: Software Development']
 KEYWORDS = [
     'c', 'call graph', 'control flow', 'dot',
