@@ -1,0 +1,55 @@
+---
+# configuration for GitHub Actions
+name: tests
+on:
+    push:
+    pull_request:
+    schedule:
+        - cron: '34 5 5 * *'
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-20.04
+        strategy:
+            matrix:
+                python-version: [3.9, 3.10.0-rc.1]
+        steps:
+            - uses: actions/checkout@v2
+            - name: Install APT packages
+              run: |
+                sudo apt install \
+                    cflow \
+                    graphviz
+            - name: Display version of GraphViz `dot`
+              run: |
+                dot -V
+            - name: Set up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v2
+              with:
+                  python-version: ${{ matrix.python-version }}
+            - name: Update Python environment
+              run: |
+                pip install --upgrade pip setuptools
+            - name: Package `pycflow2dot`
+              run: |
+                python setup.py sdist
+            - name: Install `networkx` without dependencies
+              run: |
+                # `networkx >= 2.6` has dependencies
+                # that were previously optional,
+                # and a minimal installation suffices here.
+                pip install --no-deps networkx
+            - name: Install `pycflow2dot`
+              run: |
+                pip install dist/pycflow2dot-*.tar.gz
+            - name: Install test dependencies
+              run: |
+                pip install pytest
+            - name: Run `pycflow2dot` tests
+              run: |
+                set -o posix
+                echo "Exported environment variables:"
+                export -p
+                cd tests/
+                # run tests
+                make all
