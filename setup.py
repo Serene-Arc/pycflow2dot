@@ -25,7 +25,7 @@ PYTHON_REQUIRES = '>= 3.9'
 INSTALL_REQUIRES = [
     'networkx >= 2.0',
     'pydot >= 1.2.3']
-TESTS_REQUIRE = ['nose >= 1.3.4']
+TESTS_REQUIRE = ['pytest >= 6.2.5']
 CLASSIFIERS = [
     'Development Status :: 2 - Pre-Alpha',
     'Intended Audience :: Developers',
