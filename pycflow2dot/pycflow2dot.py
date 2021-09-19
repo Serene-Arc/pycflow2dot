@@ -572,6 +572,9 @@ def parse_args():
         '-x', '--exclude', default='',
         help='file listing functions to ignore')
     parser.add_argument(
+        '-X', '--exclude-funcs', default='',
+        help='functions to ignore')
+    parser.add_argument(
         '-v', '--verbosity', default='ERROR',
         choices=['ERROR', 'WARNING', 'INFO', 'DEBUG'],
         help='logging level')
@@ -585,13 +588,18 @@ def parse_args():
     return args
 
 
-def rm_excluded_funcs(list_fname, graphs):
-    # nothing ignored ?
-    if not list_fname:
-        return
-    # load list of ignored functions
-    with open(list_fname) as f:
-        rm_nodes = [line.strip() for line in f.readlines()]
+def parse_excluded_funcs(list_fname, list_args):
+    out = set()
+    if list_fname:
+        with open(list_fname, 'r') as file:
+            for line in file:
+                out.add(line.strip())
+    list_args = re.split(r'[;, ]+', list_args)
+    [out.add(a) for a in list_args]
+    return out
+
+
+def rm_excluded_funcs(rm_nodes, graphs):
     # delete them
     for graph in graphs:
         for node in rm_nodes:
@@ -616,6 +624,7 @@ def main():
     layout = args.layout
     rankdir = args.rankdir
     exclude_list_fname = args.exclude
+    exclude_arg_funcs = args.exclude_funcs
     # configure the logger
     logger.addHandler(logging.StreamHandler())
     logger.setLevel(args.verbosity)
@@ -639,7 +648,8 @@ def main():
     for cflow_out, c_fname in zip(cflow_strs, c_fnames):
         cur_graph = cflow2nx(cflow_out, c_fname)
         graphs.append(cur_graph)
-    rm_excluded_funcs(exclude_list_fname, graphs)
+    exclude_list = parse_excluded_funcs(exclude_list_fname, exclude_arg_funcs)
+    rm_excluded_funcs(exclude_list, graphs)
     if merge:
         g = _merge_graphs(graphs, c_fnames)
         _mark_call_paths(g, source, target)
