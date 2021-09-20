@@ -572,7 +572,7 @@ def parse_args():
         '-x', '--exclude', default='',
         help='file listing functions to ignore')
     parser.add_argument(
-        '-X', '--exclude-funcs', default='',
+        '-X', '--exclude-functions', default='',
         help='functions to ignore')
     parser.add_argument(
         '-v', '--verbosity', default='ERROR',
