@@ -590,12 +590,11 @@ def parse_args():
 
 def parse_excluded_funcs(list_fname, list_args):
     out = set()
+    list_args = re.split(r'[;, ]+', list_args)
+    out.update(list_args)
     if list_fname:
         with open(list_fname, 'r') as file:
-            for line in file:
-                out.add(line.strip())
-    list_args = re.split(r'[;, ]+', list_args)
-    [out.add(a) for a in list_args]
+            out.update(line.strip() for line in file)
     return out
 
 
