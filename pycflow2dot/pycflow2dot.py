@@ -570,10 +570,10 @@ def parse_args():
         help='graph layout direction given to `dot`.')
     parser.add_argument(
         '-x', '--exclude', default='',
-        help='file listing functions to ignore')
+        help='file listing functions to ignore; combined with --exclude-functions')
     parser.add_argument(
         '-X', '--exclude-functions', default='',
-        help='functions to ignore')
+        help='functions to ignore; combined with --exclude')
     parser.add_argument(
         '-v', '--verbosity', default='ERROR',
         choices=['ERROR', 'WARNING', 'INFO', 'DEBUG'],
