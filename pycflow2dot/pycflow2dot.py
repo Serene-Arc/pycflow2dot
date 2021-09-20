@@ -588,7 +588,7 @@ def parse_args():
     return args
 
 
-def parse_excluded_funcs(list_fname, func_names):
+def _parse_excluded_funcs(list_fname, func_names):
     out = set()
     func_names = re.split(r'[;, ]+', func_names)
     out.update(func_names)
@@ -647,7 +647,7 @@ def main():
     for cflow_out, c_fname in zip(cflow_strs, c_fnames):
         cur_graph = cflow2nx(cflow_out, c_fname)
         graphs.append(cur_graph)
-    exclude_list = parse_excluded_funcs(exclude_list_fname, exclude_arg_funcs)
+    exclude_list = _parse_excluded_funcs(exclude_list_fname, exclude_arg_funcs)
     rm_excluded_funcs(exclude_list, graphs)
     if merge:
         g = _merge_graphs(graphs, c_fnames)
