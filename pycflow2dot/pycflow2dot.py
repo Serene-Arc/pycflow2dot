@@ -588,10 +588,10 @@ def parse_args():
     return args
 
 
-def parse_excluded_funcs(list_fname, list_args):
+def parse_excluded_funcs(list_fname, func_names):
     out = set()
-    list_args = re.split(r'[;, ]+', list_args)
-    out.update(list_args)
+    func_names = re.split(r'[;, ]+', func_names)
+    out.update(func_names)
     if list_fname:
         with open(list_fname, 'r') as file:
             out.update(line.strip() for line in file)
